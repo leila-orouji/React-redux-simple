@@ -1,26 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import shop from './api/shop';
+import ProductList from './components/ProductsList'
+import { connect } from 'react-redux';
+import { receiveProducts } from './actions/actionCreator';
+import Card from './components/Card';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.Component {
+
+  componentWillMount(){
+    shop.getProducts((products)=> this.props.receiveProducts(products))
+  }
+  render(){
+    console.log('huuyu:', this.props)
+    return (
+      <div>
+          <h1>Welcome to Shopping Card Example</h1>
+          <hr/>
+          <ProductList />
+          <hr/>
+          <Card/>
+      </div>
+  
+    );
+  }
 }
 
-export default App;
+
+const mapDispatchToProps = dispatch => {
+  return{
+    receiveProducts : products => dispatch(receiveProducts(products))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(App);
